@@ -1,5 +1,6 @@
 package com.example.renal.service;
 
+import java.util.List;
 import java.util.Optional;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -12,18 +13,20 @@ import com.example.renal.repository.UserRepository;
 public class UserService {
 	@Autowired
 	private UserRepository userRepository;
-	
-	public String testarServico(Long id) {
 
-		User user = new User();
+	public User findById(long id) {
+		User users = new User();
+		 users = userRepository.findById(id).get();
+		 return users ;
+	}
+
+	public List<User> findAll(){
+		return userRepository.findAll();
+	}
 	
-		Optional<User> users = userRepository.findById(id);
 		
-		return users.toString();
 		
-	 }
+	 
 	
 
 }
-
-

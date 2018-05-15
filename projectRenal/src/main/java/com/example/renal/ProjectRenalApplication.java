@@ -16,8 +16,7 @@ public class ProjectRenalApplication {
 		SpringApplication.run(ProjectRenalApplication.class, args);
 	}
 	
-	@Autowired
-	private UserService userServie;
+	
 	
 
 	
