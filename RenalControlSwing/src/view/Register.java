@@ -166,6 +166,7 @@ public class Register extends javax.swing.JDialog {
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void entNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_entNomeActionPerformed

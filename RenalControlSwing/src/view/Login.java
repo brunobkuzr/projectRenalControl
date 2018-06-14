@@ -25,6 +25,7 @@ public class Login extends javax.swing.JDialog {
      */
     public Login(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+        setLocationRelativeTo( null );
         initComponents();
     }
 
@@ -44,6 +45,7 @@ public class Login extends javax.swing.JDialog {
         botEnt = new javax.swing.JButton();
         botReg = new javax.swing.JButton();
         jSeparator1 = new javax.swing.JSeparator();
+        jSeparator2 = new javax.swing.JSeparator();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
@@ -59,6 +61,11 @@ public class Login extends javax.swing.JDialog {
         });
 
         botReg.setText("Registrar");
+        botReg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botRegActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -79,6 +86,7 @@ public class Login extends javax.swing.JDialog {
                         .addComponent(textSenha, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
                         .addComponent(textUsuario)))
                 .addContainerGap(96, Short.MAX_VALUE))
+            .addComponent(jSeparator2)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jSeparator1)
@@ -101,10 +109,13 @@ public class Login extends javax.swing.JDialog {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(botEnt)
                     .addComponent(botReg))
-                .addContainerGap(43, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(15, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void botEntActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botEntActionPerformed
@@ -127,6 +138,11 @@ public class Login extends javax.swing.JDialog {
             }
         }
     }//GEN-LAST:event_botEntActionPerformed
+
+    private void botRegActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botRegActionPerformed
+       // Register register = new Register();
+        //register.setVisible(true);
+    }//GEN-LAST:event_botRegActionPerformed
 
     /**
      * @param args the command line arguments
@@ -203,6 +219,7 @@ public class Login extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
     private javax.swing.JPasswordField textSenha;
     private javax.swing.JTextField textUsuario;
     // End of variables declaration//GEN-END:variables
