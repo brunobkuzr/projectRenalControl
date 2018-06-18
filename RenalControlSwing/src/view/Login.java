@@ -12,20 +12,20 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
-import javax.swing.JOptionPane;
+import model.Usuario;
 
 /**
  *
  * @author Bruno
  */
-public class Login extends javax.swing.JDialog {
+public class Login extends javax.swing.JFrame {
+    static int cdusuari = 0;
+    static String nmusuari = "";
 
     /**
      * Creates new form Login
      */
-    public Login(java.awt.Frame parent, boolean modal) {
-        super(parent, modal);
-        setLocationRelativeTo( null );
+    public Login() {
         initComponents();
     }
 
@@ -47,7 +47,7 @@ public class Login extends javax.swing.JDialog {
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jLabel1.setText("Usuário");
 
@@ -85,7 +85,7 @@ public class Login extends javax.swing.JDialog {
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                         .addComponent(textSenha, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 163, Short.MAX_VALUE)
                         .addComponent(textUsuario)))
-                .addContainerGap(96, Short.MAX_VALUE))
+                .addContainerGap(88, Short.MAX_VALUE))
             .addComponent(jSeparator2)
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
@@ -111,7 +111,7 @@ public class Login extends javax.swing.JDialog {
                     .addComponent(botReg))
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(15, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
@@ -119,17 +119,18 @@ public class Login extends javax.swing.JDialog {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botEntActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botEntActionPerformed
-        if(textUsuario.getText().equals("") == true || textSenha.getPassword().equals("")==true){
-            JOptionPane.showMessageDialog(rootPane, "Digite usuário e senha");
+        if (textUsuario.getText().equals("") == true || textSenha.getPassword().equals("") == true) {
+            
         } else {
             try {
-                if(validaUsuario() == true){
-                    Menu menu = new Menu();
+                if (validaUsuario() == true) {
+                    Usuario usuario = new Usuario(cdusuari, nmusuari);
+                    Menu menu = new Menu(usuario);
                     this.setVisible(false);
                     menu.setVisible(true);
-                    
-                } else{
-                  JOptionPane.showMessageDialog(rootPane, "Usuário ou senha incorreto.");
+
+                } else {
+           
                 }
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
@@ -138,10 +139,12 @@ public class Login extends javax.swing.JDialog {
             }
         }
     }//GEN-LAST:event_botEntActionPerformed
-
+   
     private void botRegActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botRegActionPerformed
-       // Register register = new Register();
-        //register.setVisible(true);
+        Registro registro = new Registro();
+        this.setVisible(false);
+        registro.setVisible(true);
+
     }//GEN-LAST:event_botRegActionPerformed
 
     /**
@@ -171,48 +174,43 @@ public class Login extends javax.swing.JDialog {
         }
         //</editor-fold>
 
-        /* Create and display the dialog */
+        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                Login dialog = new Login(new javax.swing.JFrame(), true);
-                dialog.addWindowListener(new java.awt.event.WindowAdapter() {
-                    @Override
-                    public void windowClosing(java.awt.event.WindowEvent e) {
-                        System.exit(0);
-                    }
-                });
-                dialog.setVisible(true);
+                new Login().setVisible(true);
             }
         });
     }
-    
-    public boolean validaUsuario() throws ClassNotFoundException, SQLException{
+
+    public boolean validaUsuario() throws ClassNotFoundException, SQLException {
         String sdnmusuario = textUsuario.getText().trim();
         char sddspasswor[] = textSenha.getPassword();
-        String sdpwusuari = "";        
-        for(int i = 0; i<sddspasswor.length; i++){
+        String sdpwusuari = "";
+        for (int i = 0; i < sddspasswor.length; i++) {
             sdpwusuari += sddspasswor[i];
         }
         String sddscomsql = "";
         boolean sddsreturn = false;
-       try{
-           Class.forName("com.mysql.cj.jdbc.Driver");
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_renalcontrol?useTimezone=true&serverTimezone=UTC", "root", "root");
             Statement stmt = con.createStatement();
             ResultSet rs_usuario;
-            sddscomsql = " select * from usuarios where nmusuari = '"+sdnmusuario+"' and pwusuari='"+sdpwusuari+"'";
+            sddscomsql = " select * from usuarios where nmusuari = '" + sdnmusuario + "' and pwusuari='" + sdpwusuari + "'";
             rs_usuario = stmt.executeQuery(sddscomsql);
-            if(rs_usuario.next() == true){
+            if (rs_usuario.next() == true) {
+                nmusuari = rs_usuario.getString("nmusuari");
+                cdusuari = rs_usuario.getInt("cdusuari");
                 sddsreturn = true;
             }
-       } catch (SQLException Erro) {
-            JOptionPane.showMessageDialog(null,
+        } catch (SQLException Erro) {
+            javax.swing.JOptionPane.showMessageDialog(null,
                     "Erro Cmdo SQL" + Erro.getMessage());
-       }
-        
+        }
+
         return sddsreturn;
     }
-
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botEnt;
     private javax.swing.JButton botReg;
