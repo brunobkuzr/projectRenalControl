@@ -8,6 +8,7 @@ package view;
 import javax.swing.Icon;
 import javax.swing.ImageIcon;
 import javax.swing.JOptionPane;
+import javax.swing.plaf.basic.BasicInternalFrameUI;
 import model.Usuario;
 
 
@@ -25,7 +26,7 @@ public class Menu extends javax.swing.JFrame {
         initComponents();
        
     }
-    Teste teste = new Teste();
+    Remedios teste = new Remedios();
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -144,7 +145,7 @@ public class Menu extends javax.swing.JFrame {
        
         jPanel2.add(teste);
         teste.setSize(jPanel2.getSize());
-        JOptionPane.showMessageDialog(rootPane, teste.getSize());
+        ((BasicInternalFrameUI)teste.getUI()).setNorthPane(null);
         teste.setVisible(true);
         
     }//GEN-LAST:event_jButton1ActionPerformed

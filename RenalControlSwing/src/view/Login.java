@@ -19,6 +19,7 @@ import model.Usuario;
  * @author Bruno
  */
 public class Login extends javax.swing.JFrame {
+
     static int cdusuari = 0;
     static String nmusuari = "";
 
@@ -52,6 +53,12 @@ public class Login extends javax.swing.JFrame {
         jLabel1.setText("Usuário");
 
         jLabel2.setText("Senha");
+
+        textSenha.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                textSenhaKeyPressed(evt);
+            }
+        });
 
         botEnt.setText("Entrar");
         botEnt.addActionListener(new java.awt.event.ActionListener() {
@@ -120,7 +127,7 @@ public class Login extends javax.swing.JFrame {
 
     private void botEntActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botEntActionPerformed
         if (textUsuario.getText().equals("") == true || textSenha.getPassword().equals("") == true) {
-            
+
         } else {
             try {
                 if (validaUsuario() == true) {
@@ -130,7 +137,7 @@ public class Login extends javax.swing.JFrame {
                     menu.setVisible(true);
 
                 } else {
-           
+
                 }
             } catch (ClassNotFoundException ex) {
                 Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
@@ -139,13 +146,38 @@ public class Login extends javax.swing.JFrame {
             }
         }
     }//GEN-LAST:event_botEntActionPerformed
-   
+
     private void botRegActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botRegActionPerformed
         Registro registro = new Registro();
         this.setVisible(false);
         registro.setVisible(true);
 
     }//GEN-LAST:event_botRegActionPerformed
+
+    private void textSenhaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textSenhaKeyPressed
+        if (evt.getKeyCode() == evt.VK_ENTER) {
+            if (textUsuario.getText().equals("") == true || textSenha.getPassword().equals("") == true) {
+
+            } else {
+                try {
+                    if (validaUsuario() == true) {
+                        Usuario usuario = new Usuario(cdusuari, nmusuari);
+                        Menu menu = new Menu(usuario);
+                        this.setVisible(false);
+                        menu.setVisible(true);
+
+                    } else {
+
+                    }
+                } catch (ClassNotFoundException ex) {
+                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                } catch (SQLException ex) {
+                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+                }
+            }
+        }
+
+    }//GEN-LAST:event_textSenhaKeyPressed
 
     /**
      * @param args the command line arguments
@@ -210,7 +242,7 @@ public class Login extends javax.swing.JFrame {
 
         return sddsreturn;
     }
-    
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botEnt;
     private javax.swing.JButton botReg;
