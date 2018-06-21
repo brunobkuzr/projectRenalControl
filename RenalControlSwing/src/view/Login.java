@@ -12,6 +12,7 @@ import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
+import javax.swing.JOptionPane;
 import model.Usuario;
 
 /**
@@ -126,25 +127,7 @@ public class Login extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void botEntActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botEntActionPerformed
-        if (textUsuario.getText().equals("") == true || textSenha.getPassword().equals("") == true) {
-
-        } else {
-            try {
-                if (validaUsuario() == true) {
-                    Usuario usuario = new Usuario(cdusuari, nmusuari);
-                    Menu menu = new Menu(usuario);
-                    this.setVisible(false);
-                    menu.setVisible(true);
-
-                } else {
-
-                }
-            } catch (ClassNotFoundException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            } catch (SQLException ex) {
-                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-            }
-        }
+         validaEntrada();
     }//GEN-LAST:event_botEntActionPerformed
 
     private void botRegActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botRegActionPerformed
@@ -156,25 +139,7 @@ public class Login extends javax.swing.JFrame {
 
     private void textSenhaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_textSenhaKeyPressed
         if (evt.getKeyCode() == evt.VK_ENTER) {
-            if (textUsuario.getText().equals("") == true || textSenha.getPassword().equals("") == true) {
-
-            } else {
-                try {
-                    if (validaUsuario() == true) {
-                        Usuario usuario = new Usuario(cdusuari, nmusuari);
-                        Menu menu = new Menu(usuario);
-                        this.setVisible(false);
-                        menu.setVisible(true);
-
-                    } else {
-
-                    }
-                } catch (ClassNotFoundException ex) {
-                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-                } catch (SQLException ex) {
-                    Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
-                }
-            }
+            validaEntrada();
         }
 
     }//GEN-LAST:event_textSenhaKeyPressed
@@ -212,6 +177,30 @@ public class Login extends javax.swing.JFrame {
                 new Login().setVisible(true);
             }
         });
+    }
+
+    public void validaEntrada() {
+
+        if (textUsuario.getText().equals("") == true || textSenha.getPassword().equals("") == true) {
+            JOptionPane.showMessageDialog(rootPane, "Preencha os campos de usuário e senha.");
+        } else {
+            try {
+                if (validaUsuario() == true) {
+                    Usuario usuario = new Usuario(cdusuari, nmusuari);
+                    Menu menu = new Menu(usuario);
+                    this.setVisible(false);
+                    menu.setVisible(true);
+
+                } else {
+                    JOptionPane.showMessageDialog(rootPane, "Usuário ou senha incorreto");
+                }
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            } catch (SQLException ex) {
+                Logger.getLogger(Login.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
     }
 
     public boolean validaUsuario() throws ClassNotFoundException, SQLException {

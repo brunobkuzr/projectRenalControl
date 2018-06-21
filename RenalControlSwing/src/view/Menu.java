@@ -17,16 +17,29 @@ import model.Usuario;
  * @author Bruno
  */
 public class Menu extends javax.swing.JFrame {
+    static int sdcdusuari;
+    static String sdnmusuari;
+    
+    private Usuario usuario;
 
+    public Usuario getUsuario() {
+        return usuario;
+    }
+
+    public void setUsuario(Usuario usuario) {
+        this.usuario = usuario;
+    }
     /**
      * Creates new form Menu
      */
     public Menu(Usuario usuario) {
-        
+        JOptionPane.showMessageDialog(rootPane, usuario.getNmusuari());
+        sdcdusuari = usuario.getCdusuari();
+        sdnmusuari = usuario.getNmusuari();
         initComponents();
        
     }
-    Remedios teste = new Remedios();
+
     
     /**
      * This method is called from within the constructor to initialize the form.
@@ -54,6 +67,7 @@ public class Menu extends javax.swing.JFrame {
         jLabel1.setIcon(new javax.swing.ImageIcon(getClass().getResource("/icons/logo.jpg"))); // NOI18N
 
         jButton1.setText("Remédios");
+        jButton1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton1ActionPerformed(evt);
@@ -61,6 +75,7 @@ public class Menu extends javax.swing.JFrame {
         });
 
         jButton2.setText("Exames");
+        jButton2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jButton2.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jButton2ActionPerformed(evt);
@@ -68,6 +83,7 @@ public class Menu extends javax.swing.JFrame {
         });
 
         jButton3.setText("Métricas");
+        jButton3.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
         botMedicacao.setBackground(new java.awt.Color(3, 163, 3));
         botMedicacao.setText("MEDICAÇÃO");
@@ -142,16 +158,20 @@ public class Menu extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-       
+       // JOptionPane.showMessageDialog(rootPane, sdnmusuari + " nome do usuário");
+           Remedios teste = new Remedios(sdcdusuari);
+    
         jPanel2.add(teste);
         teste.setSize(jPanel2.getSize());
+        //JOptionPane.showMessageDialog(rootPane, jPanel2.getSize());
         ((BasicInternalFrameUI)teste.getUI()).setNorthPane(null);
         teste.setVisible(true);
         
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    
     private void jButton2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton2ActionPerformed
-        teste.setVisible(false);
+       // teste.setVisible(false);
     }//GEN-LAST:event_jButton2ActionPerformed
 
     /**

@@ -5,17 +5,38 @@
  */
 package view;
 
+import java.sql.Connection;
+import java.sql.DriverManager;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
+import javax.swing.JOptionPane;
+import model.Usuario;
+
 /**
  *
  * @author Bruno
  */
 public class Remedios extends javax.swing.JInternalFrame {
-
+ static int axcdusuari;
     /**
      * Creates new form Remedios
      */
-    public Remedios() {
-        initComponents();
+    public Remedios(int sdcdusuari) {
+       
+       initComponents();
+       axcdusuari = sdcdusuari;
+       JOptionPane.showMessageDialog(rootPane, "A");
+    }
+
+    public static void setAxcdusuari(int axcdusuari) {
+        Remedios.axcdusuari = axcdusuari;
+    }
+    
+    public void CarregaTabela(){
+        
+        
     }
 
     /**
@@ -28,49 +49,245 @@ public class Remedios extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        entDsremedio = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
+        entQtderemedio = new javax.swing.JTextField();
+        jSeparator1 = new javax.swing.JSeparator();
+        jSeparator2 = new javax.swing.JSeparator();
+        jScrollPane1 = new javax.swing.JScrollPane();
+        jTable1 = new javax.swing.JTable();
+        botCadastrar = new javax.swing.JButton();
+        botAtualizar = new javax.swing.JButton();
+        jLabel3 = new javax.swing.JLabel();
+        jLabel4 = new javax.swing.JLabel();
 
         jPanel2.setBackground(new java.awt.Color(255, 153, 102));
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
+
+        jLabel1.setText("Nome");
+
+        entDsremedio.setBackground(new java.awt.Color(255, 255, 153));
+
+        jLabel2.setText("Qtde");
+
+        entQtderemedio.setBackground(new java.awt.Color(255, 255, 153));
+
+        jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
+
+        jSeparator2.setForeground(new java.awt.Color(0, 0, 0));
+
+        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+                {null, null},
+                {null, null},
+                {null, null},
+                {null, null}
+            },
+            new String [] {
+                "Nome", "Qtde em estoque"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
+        jScrollPane1.setViewportView(jTable1);
+        if (jTable1.getColumnModel().getColumnCount() > 0) {
+            jTable1.getColumnModel().getColumn(0).setResizable(false);
+            jTable1.getColumnModel().getColumn(1).setResizable(false);
+        }
+
+        botCadastrar.setText("Cadastrar");
+        botCadastrar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        botCadastrar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botCadastrarActionPerformed(evt);
+            }
+        });
+
+        botAtualizar.setText("Atualizar");
+        botAtualizar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        botAtualizar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botAtualizarActionPerformed(evt);
+            }
+        });
+
+        jLabel3.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
+        jLabel3.setText("CADASTRO DE REMÉDIOS");
+
+        jLabel4.setText("jLabel4");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 643, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jSeparator1))
+            .addComponent(jSeparator2, javax.swing.GroupLayout.Alignment.TRAILING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(26, 26, 26)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel1))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(entDsremedio, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(entQtderemedio, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(botCadastrar)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(botAtualizar))))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(19, 19, 19)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 585, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(241, 241, 241)
+                        .addComponent(jLabel3)))
+                .addContainerGap(19, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addComponent(jLabel3)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jSeparator1, javax.swing.GroupLayout.PREFERRED_SIZE, 19, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1)
+                            .addComponent(entDsremedio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel2)
+                            .addComponent(entQtderemedio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(botCadastrar)
+                            .addComponent(botAtualizar))
+                        .addGap(24, 24, 24)
+                        .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 340, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jLabel4))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 720, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addGap(36, 36, 36)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGap(37, 37, 37)))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(21, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 463, Short.MAX_VALUE)
-            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(layout.createSequentialGroup()
-                    .addContainerGap()
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addContainerGap()))
+            .addGroup(layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(86, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
+    private void botCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botCadastrarActionPerformed
+ JOptionPane.showMessageDialog(rootPane, axcdusuari + " axcdusuari");
+        try {
+         inserirDados();
+         entDsremedio.setText("");
+         entQtderemedio.setText("");
+     } catch (SQLException ex) {
+         Logger.getLogger(Remedios.class.getName()).log(Level.SEVERE, null, ex);
+     } catch (ClassNotFoundException ex) {
+         Logger.getLogger(Remedios.class.getName()).log(Level.SEVERE, null, ex);
+     }
+    }//GEN-LAST:event_botCadastrarActionPerformed
+
+    private void botAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botAtualizarActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_botAtualizarActionPerformed
+
+     public void atualizarDados() throws ClassNotFoundException{
+         try {
+            //MySql connector driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_renalcontrol?useTimezone=true&serverTimezone=UTC", "root", "root");
+            //Comando SQL
+            Statement stmt = con.createStatement();
+            //Coleta dados do formulário
+            String sdnmremedio = entDsremedio.getText().trim();
+            double sdqtestoque = Double.parseDouble(entQtderemedio.getText());
+            int sdcdusuari = axcdusuari;
+          
+
+            //Insere dados no banco
+            String sddscomsql = " update remedios set nmremedio = '"+sdnmremedio+"'";
+            sddscomsql += "'"+sdnmremedio +"'"+ "," +sdcdusuari+ "," +sdqtestoque+ ")";
+            stmt.executeUpdate(sddscomsql);
+            JOptionPane.showMessageDialog(rootPane, sdnmremedio + " cadastrado com sucesso.");
+
+        } catch (SQLException Erro) {
+            JOptionPane.showMessageDialog(null,
+                    "Erro Cmdo SQL" + Erro.getMessage());
+
+// Trata erros de conexão.
+        }
+     }
+     
+     public void inserirDados() throws SQLException, ClassNotFoundException {
+        try {
+            //MySql connector driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_renalcontrol?useTimezone=true&serverTimezone=UTC", "root", "root");
+            //Comando SQL
+            Statement stmt = con.createStatement();
+            //Coleta dados do formulário
+            String sdnmremedio = entDsremedio.getText().trim();
+            double sdqtestoque = Double.parseDouble(entQtderemedio.getText());
+            int sdcdusuari = axcdusuari;
+          
+
+            //Insere dados no banco
+            String sddscomsql = " insert into remedios (nmremedio,cdusuari,qtremedio) values (";
+            sddscomsql += "'"+sdnmremedio +"'"+ "," +sdcdusuari+ "," +sdqtestoque+ ")";
+            stmt.executeUpdate(sddscomsql);
+            JOptionPane.showMessageDialog(rootPane, sdnmremedio + " cadastrado com sucesso.");
+
+        } catch (SQLException Erro) {
+            JOptionPane.showMessageDialog(null,
+                    "Erro Cmdo SQL" + Erro.getMessage());
+
+// Trata erros de conexão.
+        }
+    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton botAtualizar;
+    private javax.swing.JButton botCadastrar;
+    private javax.swing.JTextField entDsremedio;
+    private javax.swing.JTextField entQtderemedio;
+    private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
+    private javax.swing.JLabel jLabel3;
+    private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel2;
-    private javax.swing.JPanel jPanel3;
-    private javax.swing.JPanel jPanel4;
+    private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JSeparator jSeparator1;
+    private javax.swing.JSeparator jSeparator2;
+    private javax.swing.JTable jTable1;
     // End of variables declaration//GEN-END:variables
 }

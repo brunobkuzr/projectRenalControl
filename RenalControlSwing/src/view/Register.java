@@ -20,13 +20,14 @@ import javax.swing.JOptionPane;
  */
 public class Register extends javax.swing.JDialog {
 
-    
     /**
      * Creates new form Register
      */
     public Register(java.awt.Frame parent, boolean modal) {
         super(parent, modal);
+       
         initComponents();
+      
     }
 
     /**
@@ -172,12 +173,11 @@ public class Register extends javax.swing.JDialog {
     private void entNomeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_entNomeActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_entNomeActionPerformed
-    
+
     private void botCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botCadastrarActionPerformed
         try {
             // TODO add your handling code here:
-            buttonGroup1.add(butMasc);
-            buttonGroup1.add(butFem);
+
             inserirDados();
         } catch (SQLException ex) {
             Logger.getLogger(Register.class.getName()).log(Level.SEVERE, null, ex);
@@ -194,7 +194,7 @@ public class Register extends javax.swing.JDialog {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        
+
         /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
@@ -220,8 +220,9 @@ public class Register extends javax.swing.JDialog {
 
         /* Create and display the dialog */
         java.awt.EventQueue.invokeLater(new Runnable() {
+            
             public void run() {
-               
+
                 Register dialog = new Register(new javax.swing.JFrame(), true);
                 dialog.addWindowListener(new java.awt.event.WindowAdapter() {
                     @Override
@@ -251,7 +252,7 @@ public class Register extends javax.swing.JDialog {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JSeparator jSeparator1;
     // End of variables declaration//GEN-END:variables
-    
+
     //Salva dados no banco
     public void inserirDados() throws SQLException, ClassNotFoundException {
         try {
@@ -267,7 +268,7 @@ public class Register extends javax.swing.JDialog {
             String sddspasswo = entSenha.getText().trim();
             String sddsauxili = buttonGroup1.getSelection().toString();
             String sddsgenero = "";
-            if(buttonGroup1.getSelection().toString().equals("Masculino") == true){
+            if (buttonGroup1.getSelection().toString().equals("Masculino") == true) {
                 sddsgenero = "M";
             } else {
                 sddsgenero = "F";
@@ -275,7 +276,7 @@ public class Register extends javax.swing.JDialog {
 
             //Insere dados no banco
             String sddscomsql = " insert into usuarios (nmcomple,nmemailx,nmusuari,pwusuari,genero) values (";
-            sddscomsql += "'"+sddsusuari +"'"+ "," +"'"+ sddsemausu +"'"+ "," +"'"+ sdnmusuari +"'"+ "," + "'"+ sddspasswo +"'"+ "," + "'" + sddsgenero+"'" + ")";
+            sddscomsql += "'" + sddsusuari + "'" + "," + "'" + sddsemausu + "'" + "," + "'" + sdnmusuari + "'" + "," + "'" + sddspasswo + "'" + "," + "'" + sddsgenero + "'" + ")";
             stmt.executeUpdate(sddscomsql);
 
         } catch (SQLException Erro) {
