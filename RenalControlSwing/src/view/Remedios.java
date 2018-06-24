@@ -7,12 +7,15 @@ package view;
 
 import java.sql.Connection;
 import java.sql.DriverManager;
+import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
 import model.Usuario;
+import static view.Login.nmusuari;
 
 /**
  *
@@ -23,12 +26,15 @@ public class Remedios extends javax.swing.JInternalFrame {
     /**
      * Creates new form Remedios
      */
-    public Remedios(int sdcdusuari) {
+    public Remedios(int sdcdusuari) throws ClassNotFoundException {
        
        initComponents();
        axcdusuari = sdcdusuari;
-       JOptionPane.showMessageDialog(rootPane, "A");
+       carregaTabela();
+       
+    //   JOptionPane.showMessageDialog(rootPane, "A");
     }
+ 
 
     public static void setAxcdusuari(int axcdusuari) {
         Remedios.axcdusuari = axcdusuari;
@@ -210,6 +216,7 @@ public class Remedios extends javax.swing.JInternalFrame {
          inserirDados();
          entDsremedio.setText("");
          entQtderemedio.setText("");
+         carregaTabela();
      } catch (SQLException ex) {
          Logger.getLogger(Remedios.class.getName()).log(Level.SEVERE, null, ex);
      } catch (ClassNotFoundException ex) {
@@ -223,6 +230,7 @@ public class Remedios extends javax.swing.JInternalFrame {
 
      public void atualizarDados() throws ClassNotFoundException{
          try {
+             jLabel4.setText((String) jTable1.getModel().getValueAt(jTable1.getSelectedRow() ,0));
             //MySql connector driver
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_renalcontrol?useTimezone=true&serverTimezone=UTC", "root", "root");
@@ -273,6 +281,35 @@ public class Remedios extends javax.swing.JInternalFrame {
 
 // Trata erros de conexão.
         }
+    }
+     
+    public void carregaTabela() throws ClassNotFoundException{
+        DefaultTableModel modelo = new DefaultTableModel(null, new String[] {"ID","Nome do remédio", "Qtde. em estoque"});
+ 
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_renalcontrol?useTimezone=true&serverTimezone=UTC", "root", "root");
+            Statement stmt = con.createStatement();
+            ResultSet rs_remedio;
+            String sddscomsql  = " select * from remedios where remedios.cdusuari = " + axcdusuari;
+            rs_remedio = stmt.executeQuery(sddscomsql);
+            while (rs_remedio.next()== true) {
+                String[] dados = new String[4];
+                dados[0] = String.valueOf((int)rs_remedio.getDouble("cdremedio"));
+                dados[1] = rs_remedio.getString("nmremedio");
+                dados[2] = String.valueOf(rs_remedio.getDouble("qtremedio"));
+                modelo.addRow(dados);
+                jTable1.setModel(modelo);
+                jTable1.getColumnModel().getColumn(0).setPreferredWidth(1);
+            }
+            rs_remedio.close();
+        } catch (SQLException Erro) {
+            javax.swing.JOptionPane.showMessageDialog(null,
+                    "Erro Cmdo SQL" + Erro.getMessage());
+        }
+
+        
+    
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
