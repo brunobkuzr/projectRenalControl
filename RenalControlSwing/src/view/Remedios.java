@@ -31,6 +31,7 @@ public class Remedios extends javax.swing.JInternalFrame {
        initComponents();
        axcdusuari = sdcdusuari;
        carregaTabela();
+       jLabel4.setVisible(false);
        
     //   JOptionPane.showMessageDialog(rootPane, "A");
     }
@@ -102,6 +103,12 @@ public class Remedios extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
+        jTable1.setSelectionForeground(new java.awt.Color(255, 255, 102));
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
         if (jTable1.getColumnModel().getColumnCount() > 0) {
             jTable1.getColumnModel().getColumn(0).setResizable(false);
@@ -148,11 +155,11 @@ public class Remedios extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(entDsremedio, javax.swing.GroupLayout.PREFERRED_SIZE, 174, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(entQtderemedio, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(jPanel2Layout.createSequentialGroup()
                                 .addComponent(botCadastrar)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(botAtualizar))))
+                                .addComponent(botAtualizar))
+                            .addComponent(entQtderemedio, javax.swing.GroupLayout.PREFERRED_SIZE, 63, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(19, 19, 19)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 585, javax.swing.GroupLayout.PREFERRED_SIZE))
@@ -225,28 +232,49 @@ public class Remedios extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_botCadastrarActionPerformed
 
     private void botAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botAtualizarActionPerformed
-        // TODO add your handling code here:
+     try {
+         atualizaDados();
+         // TODO add your handling code here:
+     } catch (ClassNotFoundException ex) {
+         Logger.getLogger(Remedios.class.getName()).log(Level.SEVERE, null, ex);
+     }
     }//GEN-LAST:event_botAtualizarActionPerformed
 
-     public void atualizarDados() throws ClassNotFoundException{
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+      Object sdvlclicked = jTable1.getValueAt(jTable1.getSelectedRow(), 0);
+      Object sdnmremedio = jTable1.getValueAt(jTable1.getSelectedRow(), 1);
+      Object sdqtderemed = jTable1.getValueAt(jTable1.getSelectedRow(), 2);
+      
+      String axdsremedio = sdnmremedio.toString();
+      String axqtderemed = sdqtderemed.toString();
+      String sdremediost = sdvlclicked.toString();
+      
+      jLabel4.setText(sdremediost);
+      entDsremedio.setText(axdsremedio);
+      entQtderemedio.setText(axqtderemed);
+      
+    }//GEN-LAST:event_jTable1MouseClicked
+
+
+     public void atualizaDados() throws ClassNotFoundException{
          try {
-             jLabel4.setText((String) jTable1.getModel().getValueAt(jTable1.getSelectedRow() ,0));
             //MySql connector driver
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_renalcontrol?useTimezone=true&serverTimezone=UTC", "root", "root");
             //Comando SQL
             Statement stmt = con.createStatement();
             //Coleta dados do formulário
+            int cdremedio = Integer.parseInt(jLabel4.getText());
             String sdnmremedio = entDsremedio.getText().trim();
             double sdqtestoque = Double.parseDouble(entQtderemedio.getText());
             int sdcdusuari = axcdusuari;
           
 
             //Insere dados no banco
-            String sddscomsql = " update remedios set nmremedio = '"+sdnmremedio+"'";
-            sddscomsql += "'"+sdnmremedio +"'"+ "," +sdcdusuari+ "," +sdqtestoque+ ")";
+            String sddscomsql = "update remedios set nmremedio ='"+sdnmremedio+"',"+"qtremedio="+sdqtestoque+" where cdremedio = "+cdremedio;
             stmt.executeUpdate(sddscomsql);
-            JOptionPane.showMessageDialog(rootPane, sdnmremedio + " cadastrado com sucesso.");
+            JOptionPane.showMessageDialog(rootPane, sdnmremedio + " atualizado.");
+            carregaTabela();
 
         } catch (SQLException Erro) {
             JOptionPane.showMessageDialog(null,
@@ -254,8 +282,9 @@ public class Remedios extends javax.swing.JInternalFrame {
 
 // Trata erros de conexão.
         }
-     }
+    }
      
+    
      public void inserirDados() throws SQLException, ClassNotFoundException {
         try {
             //MySql connector driver
