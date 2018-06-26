@@ -10,6 +10,9 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.ArrayList;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
 import static view.Remedios.axcdusuari;
@@ -19,12 +22,17 @@ import static view.Remedios.axcdusuari;
  * @author Bruno
  */
 public class Periodos extends javax.swing.JInternalFrame {
-DefaultListModel model = new DefaultListModel();
+
+    DefaultListModel model = new DefaultListModel();
+    public static int axcdusuari;
+    public static ArrayList tbnmremedi = new ArrayList();
+    public static ArrayList tbqtremedi = new ArrayList();
+
     /**
      * Creates new form Periodos
      */
-    public Periodos(int axcdusuari) throws ClassNotFoundException {
-        
+    public Periodos(int sdcdusuari) throws ClassNotFoundException {
+        axcdusuari = sdcdusuari;
         initComponents();
         carregaLista();
     }
@@ -40,7 +48,7 @@ DefaultListModel model = new DefaultListModel();
 
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        entDsremedio = new javax.swing.JTextField();
+        entPeriod = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel3 = new javax.swing.JLabel();
@@ -53,9 +61,9 @@ DefaultListModel model = new DefaultListModel();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList2 = new javax.swing.JList<>();
         jLabel6 = new javax.swing.JLabel();
-        jTextField2 = new javax.swing.JTextField();
+        entHora = new javax.swing.JTextField();
         botIncluir = new javax.swing.JButton();
-        jButton2 = new javax.swing.JButton();
+        botCadastro = new javax.swing.JButton();
 
         setPreferredSize(new java.awt.Dimension(674, 703));
 
@@ -64,7 +72,7 @@ DefaultListModel model = new DefaultListModel();
 
         jLabel1.setText("Nome");
 
-        entDsremedio.setBackground(new java.awt.Color(255, 255, 153));
+        entPeriod.setBackground(new java.awt.Color(255, 255, 153));
 
         jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
 
@@ -87,7 +95,7 @@ DefaultListModel model = new DefaultListModel();
 
         entQtde.setBackground(new java.awt.Color(255, 255, 153));
 
-        jList2.setBackground(new java.awt.Color(153, 204, 255));
+        jList2.setBackground(new java.awt.Color(204, 204, 255));
         jList2.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
         jList2.setModel(new javax.swing.AbstractListModel<String>() {
             String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
@@ -98,7 +106,7 @@ DefaultListModel model = new DefaultListModel();
 
         jLabel6.setText("Horário");
 
-        jTextField2.setBackground(new java.awt.Color(255, 255, 153));
+        entHora.setBackground(new java.awt.Color(255, 255, 153));
 
         botIncluir.setBackground(new java.awt.Color(153, 255, 153));
         botIncluir.setText("Incluir");
@@ -109,9 +117,14 @@ DefaultListModel model = new DefaultListModel();
             }
         });
 
-        jButton2.setBackground(new java.awt.Color(153, 255, 102));
-        jButton2.setText("CADASTRAR");
-        jButton2.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        botCadastro.setBackground(new java.awt.Color(153, 255, 102));
+        botCadastro.setText("CADASTRAR");
+        botCadastro.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        botCadastro.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botCadastroActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -141,11 +154,11 @@ DefaultListModel model = new DefaultListModel();
                         .addGap(26, 26, 26)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(entDsremedio, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(entPeriod, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel6)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(entHora, javax.swing.GroupLayout.PREFERRED_SIZE, 77, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(241, 241, 241)
                         .addComponent(jLabel3))
@@ -154,7 +167,7 @@ DefaultListModel model = new DefaultListModel();
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 399, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(249, 249, 249)
-                        .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addComponent(botCadastro, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap(136, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -170,9 +183,9 @@ DefaultListModel model = new DefaultListModel();
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(jLabel1)
-                            .addComponent(entDsremedio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(entPeriod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(jLabel6)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(entHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
                     .addComponent(jLabel4))
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -190,7 +203,7 @@ DefaultListModel model = new DefaultListModel();
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 211, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(jButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(botCadastro, javax.swing.GroupLayout.PREFERRED_SIZE, 53, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(80, Short.MAX_VALUE))
         );
 
@@ -219,26 +232,122 @@ DefaultListModel model = new DefaultListModel();
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void botIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botIncluirActionPerformed
-        if(jComboBox1.getSelectedItem().toString().equals("") == true || entQtde.getText().equals("")){
+        if (jComboBox1.getSelectedItem().toString().equals("") == true || entQtde.getText().equals("")) {
             JOptionPane.showMessageDialog(rootPane, "Informe remedio e qtde.");
         } else {
-            
+
             model.addElement(jComboBox1.getSelectedItem().toString() + " - " + entQtde.getText().trim());
             jList2.setModel(model);
+
+            //adicionando ao tb
+            tbnmremedi.add(jComboBox1.getSelectedItem().toString().trim());
+            tbqtremedi.add(Double.parseDouble(entQtde.getText()));
+
         }
-        
-        
+
+
     }//GEN-LAST:event_botIncluirActionPerformed
 
-    public void carregaLista() throws ClassNotFoundException{
+    private void botCadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botCadastroActionPerformed
+        try {
+            if (entPeriod.getText().equals("") == false && entHora.getText().equals("") == false) {
+                criarPeriodo();
+                int sdcdperiod = buscaPeriodo();
+                for (int i = 0; i < tbnmremedi.size(); i++) {
+                    inserirRemedio(Double.parseDouble(tbqtremedi.get(i).toString()), tbnmremedi.get(i).toString(), sdcdperiod);
+                }
+            }
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Periodos.class.getName()).log(Level.SEVERE, null, ex);
+        } catch (SQLException ex) {
+            Logger.getLogger(Periodos.class.getName()).log(Level.SEVERE, null, ex);
+        }
+    }//GEN-LAST:event_botCadastroActionPerformed
+
+    public void inserirRemedio(double axqtremedi, String axnmremedi, int axcdperiod) throws ClassNotFoundException {
+        try {
+            //MySql connector driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_renalcontrol?useTimezone=true&serverTimezone=UTC", "root", "root");
+            //Comando SQL
+            Statement stmt = con.createStatement();
+            //Coleta dados do formulário
+            int sdcdusuari = axcdusuari;
+            String sdnmperiod = entPeriod.getText().trim();
+            
+
+            //Insere dados no banco
+            String sddscomsql = " insert into remedios_periodos (cdperiod,cdusuari,qtremedi,nmremedi) values (";
+            sddscomsql += axcdperiod + ","  + sdcdusuari + "," + axqtremedi + ",'"+axnmremedi+"'" +")";
+            stmt.executeUpdate(sddscomsql);
+
+        } catch (SQLException Erro) {
+            JOptionPane.showMessageDialog(null,
+                    "Erro Cmdo SQL" + Erro.getMessage());
+
+// Trata erros de conexão.
+        }
+
+    }
+
+    public int buscaPeriodo() throws ClassNotFoundException, SQLException {
+        int sdvlreturn = 0;
+        try {
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_renalcontrol?useTimezone=true&serverTimezone=UTC", "root", "root");
+            Statement stmt = con.createStatement();
+            ResultSet rs_periodo;
+            String sddscomsql = " select cdperiod from periodos where periodos.cdusuari = " + axcdusuari;
+            sddscomsql += " order by cdperiod desc";
+            rs_periodo = stmt.executeQuery(sddscomsql);
+            if (rs_periodo.next() == true) {
+                sdvlreturn = rs_periodo.getInt("cdperiod");
+            }
+            rs_periodo.close();
+        } catch (SQLException Erro) {
+            javax.swing.JOptionPane.showMessageDialog(null,
+                    "Erro Cmdo SQL" + Erro.getMessage());
+        }
+
+        return sdvlreturn;
+    }
+
+    public void criarPeriodo() throws ClassNotFoundException {
+
+        try {
+            //MySql connector driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_renalcontrol?useTimezone=true&serverTimezone=UTC", "root", "root");
+            //Comando SQL
+            Statement stmt = con.createStatement();
+            //Coleta dados do formulário
+            int sdcdusuari = axcdusuari;
+            String sdnmperiod = entPeriod.getText().trim();
+            int sdhorario = Integer.parseInt(entHora.getText());
+
+            //Insere dados no banco
+            String sddscomsql = " insert into periodos (cdusuari,nmperiod,hrperiod) values (";
+            sddscomsql += sdcdusuari + "," + "'" + sdnmperiod + "'," + sdhorario + ")";
+            stmt.executeUpdate(sddscomsql);
+
+        } catch (SQLException Erro) {
+            JOptionPane.showMessageDialog(null,
+                    "Erro Cmdo SQL" + Erro.getMessage());
+
+// Trata erros de conexão.
+        }
+    }
+
+    public void carregaLista() throws ClassNotFoundException {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_renalcontrol?useTimezone=true&serverTimezone=UTC", "root", "root");
             Statement stmt = con.createStatement();
             ResultSet rs_remedio;
-            String sddscomsql  = " select * from remedios where remedios.cdusuari = " + axcdusuari;
+            String sddscomsql = " select * from remedios where remedios.cdusuari = " + axcdusuari;
             rs_remedio = stmt.executeQuery(sddscomsql);
-            while (rs_remedio.next()== true) {
+            while (rs_remedio.next() == true) {
                 jComboBox1.addItem(rs_remedio.getString("nmremedio"));
             }
             rs_remedio.close();
@@ -249,10 +358,11 @@ DefaultListModel model = new DefaultListModel();
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton botCadastro;
     private javax.swing.JButton botIncluir;
-    private javax.swing.JTextField entDsremedio;
+    private javax.swing.JTextField entHora;
+    private javax.swing.JTextField entPeriod;
     private javax.swing.JTextField entQtde;
-    private javax.swing.JButton jButton2;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
@@ -266,6 +376,5 @@ DefaultListModel model = new DefaultListModel();
     private javax.swing.JSeparator jSeparator1;
     private javax.swing.JSeparator jSeparator2;
     private javax.swing.JSeparator jSeparator3;
-    private javax.swing.JTextField jTextField2;
     // End of variables declaration//GEN-END:variables
 }
