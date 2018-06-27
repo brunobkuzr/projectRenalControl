@@ -91,6 +91,11 @@ public class Menu extends javax.swing.JFrame {
         botMedicacao.setBackground(new java.awt.Color(3, 163, 3));
         botMedicacao.setText("MEDICAÇÃO");
         botMedicacao.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        botMedicacao.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                botMedicacaoActionPerformed(evt);
+            }
+        });
 
         jButton4.setText("Períodos");
         jButton4.addActionListener(new java.awt.event.ActionListener() {
@@ -212,6 +217,23 @@ public class Menu extends javax.swing.JFrame {
         //JOptionPane.showMessageDialog(rootPane, jPanel2.getSize());
 
     }//GEN-LAST:event_jButton4ActionPerformed
+
+    private void botMedicacaoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botMedicacaoActionPerformed
+        jPanel2.removeAll();
+        Medicacao teste;
+        try {
+            teste = new Medicacao(sdcdusuari);
+            jPanel2.add(teste);
+            teste.setSize(jPanel2.getSize());
+            //JOptionPane.showMessageDialog(rootPane, jPanel2.getSize());
+            ((BasicInternalFrameUI) teste.getUI()).setNorthPane(null);
+            teste.setVisible(true);
+        } catch (ClassNotFoundException ex) {
+            Logger.getLogger(Menu.class.getName()).log(Level.SEVERE, null, ex);
+        }
+
+
+    }//GEN-LAST:event_botMedicacaoActionPerformed
 
     /**
      * @param args the command line arguments
