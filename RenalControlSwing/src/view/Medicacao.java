@@ -5,6 +5,7 @@
  */
 package view;
 
+import java.awt.Color;
 import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.ResultSet;
@@ -14,21 +15,24 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import static javafx.scene.input.KeyCode.T;
 import javax.swing.JOptionPane;
+import javax.swing.UIManager;
 import javax.swing.table.DefaultTableModel;
 import static view.Periodos.axcdusuari;
 import static view.Remedios.axcdusuari;
-
-
 
 /**
  *
  * @author Bruno
  */
 public class Medicacao extends javax.swing.JInternalFrame {
+
     public static int axcdusuari;
-    DefaultTableModel modelo = new DefaultTableModel(null, new String[] {"ID","Remédio", "Qtde a tomar", "Concluído?"});
-    
- 
+    public static int axvlprogre = 0;
+    public static int axvlcontad = 0;
+    DefaultTableModel vazio = new DefaultTableModel();
+
+
+
     /**
      * Creates new form Medicacao
      */
@@ -36,6 +40,8 @@ public class Medicacao extends javax.swing.JInternalFrame {
         axcdusuari = sdcdusuari;
         initComponents();
         carregaLista();
+        jTable1.setModel(vazio);
+        
     }
 
     /**
@@ -69,6 +75,7 @@ public class Medicacao extends javax.swing.JInternalFrame {
 
         jLabel1.setText("Período");
 
+        jComboBox1.setBackground(new java.awt.Color(204, 204, 255));
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jComboBox1ActionPerformed(evt);
@@ -94,7 +101,14 @@ public class Medicacao extends javax.swing.JInternalFrame {
                 return types [columnIndex];
             }
         });
+        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                jTable1MouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(jTable1);
+
+        jProgressBar1.setBackground(new java.awt.Color(0, 204, 204));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
@@ -161,18 +175,37 @@ public class Medicacao extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jComboBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jComboBox1ActionPerformed
-       if(jComboBox1.getSelectedItem().equals("") == false){
-           try {
-               carregaTabela();
-           } catch (ClassNotFoundException ex) {
-               Logger.getLogger(Medicacao.class.getName()).log(Level.SEVERE, null, ex);
-           }
-       }
+        if (jComboBox1.getSelectedItem().equals("") == false) {
+            try {
+                carregaTabela();
+            } catch (ClassNotFoundException ex) {
+                Logger.getLogger(Medicacao.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
-    public void carregaLista() throws ClassNotFoundException{
+    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
+       
+        Object sdvlchecked = jTable1.getValueAt(jTable1.getSelectedRow(), 3);
+        if(sdvlchecked.toString().equals("false")){
+            axvlcontad -=10;
+        } 
+        if(sdvlchecked.toString().equals("true")){
+            axvlcontad +=10;
+        }
         
-         try {
+        jProgressBar1.setValue(axvlcontad);
+        if(axvlcontad == jProgressBar1.getMaximum()){
+            JOptionPane.showMessageDialog(rootPane, "Concluido");
+        }
+            
+            
+        
+    }//GEN-LAST:event_jTable1MouseClicked
+
+    public void carregaLista() throws ClassNotFoundException {
+
+        try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_renalcontrol?useTimezone=true&serverTimezone=UTC", "root", "root");
             Statement stmt = con.createStatement();
@@ -181,7 +214,7 @@ public class Medicacao extends javax.swing.JInternalFrame {
             rs_periodo = stmt.executeQuery(sddscomsql);
             jComboBox1.addItem(""); //primeira vazia
             while (rs_periodo.next() == true) {
-                
+
                 jComboBox1.addItem(rs_periodo.getString("nmperiod"));
             }
             rs_periodo.close();
@@ -203,7 +236,20 @@ public class Medicacao extends javax.swing.JInternalFrame {
     // End of variables declaration//GEN-END:variables
 
     private void carregaTabela() throws ClassNotFoundException {
-       
+        
+        
+        DefaultTableModel modelo = new DefaultTableModel(null, new String[]{"ID", "Remédio", "Qtde a tomar", "Concluído?"}) {
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                Class classType = String.class;
+                switch (columnIndex) {
+                    case 3:
+                        classType = Boolean.class;
+                        break;
+                }
+                return classType;
+            }
+        };
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_renalcontrol?useTimezone=true&serverTimezone=UTC", "root", "root");
@@ -211,27 +257,29 @@ public class Medicacao extends javax.swing.JInternalFrame {
             int sdcdperiod = 0;
             ResultSet rs_remedio;
             ResultSet rs_periodo;
-            String sddscomsql  = " select cdperiod from periodos where nmperiod = '" + jComboBox1.getSelectedItem().toString().trim()+"'";
-            sddscomsql += " and cdusuari="+axcdusuari;
+            String sddscomsql = " select cdperiod from periodos where nmperiod = '" + jComboBox1.getSelectedItem().toString().trim() + "'";
+            sddscomsql += " and cdusuari=" + axcdusuari;
             rs_periodo = stmt.executeQuery(sddscomsql);
-            if(rs_periodo.next() == true){
+            if (rs_periodo.next() == true) {
                 sdcdperiod = rs_periodo.getInt("cdperiod");
             }
             rs_periodo.close();
-            sddscomsql = " select * from remedios_periodos where cdusuari="+axcdusuari;
-            sddscomsql += " and cdperiod="+sdcdperiod;
+            sddscomsql = " select * from remedios_periodos where cdusuari=" + axcdusuari;
+            sddscomsql += " and cdperiod=" + sdcdperiod;
             rs_remedio = stmt.executeQuery(sddscomsql);
-            while (rs_remedio.next()== true) {
+
+            while (rs_remedio.next() == true) {
                 String[] dados = new String[4];
-                dados[0] = "2";
+                dados[0] = String.valueOf(rs_remedio.getDouble("cdremperi"));
                 dados[1] = rs_remedio.getString("nmremedi");
                 dados[2] = String.valueOf(rs_remedio.getDouble("qtremedi"));
                 modelo.addRow(dados);
-                modelo.addRow(new  Object[] {Boolean.FALSE});
                 jTable1.setModel(modelo);
+
                 jTable1.getColumnModel().getColumn(0).setPreferredWidth(1);
             }
             rs_remedio.close();
+            jProgressBar1.setMaximum(jTable1.getRowCount()*10);
         } catch (SQLException Erro) {
             javax.swing.JOptionPane.showMessageDialog(null,
                     "Erro Cmdo SQL" + Erro.getMessage());
