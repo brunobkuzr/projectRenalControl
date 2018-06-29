@@ -34,7 +34,10 @@ public class Periodos extends javax.swing.JInternalFrame {
     public Periodos(int sdcdusuari) throws ClassNotFoundException {
         axcdusuari = sdcdusuari;
         initComponents();
-        jList2.setModel(model);
+        tbnmremedi.clear();
+        tbqtremedi.clear();                
+        DefaultListModel vazio = new DefaultListModel();
+        jList2.setModel(vazio);
         carregaLista();
     }
 
