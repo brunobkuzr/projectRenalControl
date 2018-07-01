@@ -15,29 +15,25 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.DefaultListModel;
 import javax.swing.JOptionPane;
-import static view.Remedios.axcdusuari;
+import static view.Periodos.axcdusuari;
 
 /**
  *
  * @author Bruno
  */
-public class Periodos extends javax.swing.JInternalFrame {
+public class Resultados extends javax.swing.JInternalFrame {
 
-    DefaultListModel model = new DefaultListModel();
     public static int axcdusuari;
-    public static ArrayList tbnmremedi = new ArrayList();
-    public static ArrayList tbqtremedi = new ArrayList();
+    DefaultListModel model = new DefaultListModel();
+    public static ArrayList tbnmresult = new ArrayList();
+    public static ArrayList tbvlresult = new ArrayList();
 
     /**
-     * Creates new form Periodos
+     * Creates new form Exames
      */
-    public Periodos(int sdcdusuari) throws ClassNotFoundException {
+    public Resultados(int sdcdusuari) throws ClassNotFoundException {
         axcdusuari = sdcdusuari;
         initComponents();
-        tbnmremedi.clear();
-        tbqtremedi.clear();                
-        DefaultListModel vazio = new DefaultListModel();
-        jList2.setModel(vazio);
         carregaLista();
     }
 
@@ -52,14 +48,14 @@ public class Periodos extends javax.swing.JInternalFrame {
 
         jPanel2 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
-        entPeriod = new javax.swing.JTextField();
+        entExame = new javax.swing.JTextField();
         jSeparator1 = new javax.swing.JSeparator();
         jSeparator2 = new javax.swing.JSeparator();
         jLabel3 = new javax.swing.JLabel();
         jComboBox1 = new javax.swing.JComboBox<>();
         jLabel2 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
-        entQtde = new javax.swing.JTextField();
+        entValor = new javax.swing.JTextField();
         jSeparator3 = new javax.swing.JSeparator();
         jScrollPane1 = new javax.swing.JScrollPane();
         jList2 = new javax.swing.JList<>();
@@ -67,21 +63,19 @@ public class Periodos extends javax.swing.JInternalFrame {
         botCadastro = new javax.swing.JButton();
         jButton1 = new javax.swing.JButton();
 
-        setPreferredSize(new java.awt.Dimension(674, 703));
-
         jPanel2.setBackground(new java.awt.Color(255, 153, 102));
         jPanel2.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.RAISED));
 
         jLabel1.setText("Nome");
 
-        entPeriod.setBackground(new java.awt.Color(255, 255, 153));
+        entExame.setBackground(new java.awt.Color(255, 255, 153));
 
         jSeparator1.setForeground(new java.awt.Color(0, 0, 0));
 
         jSeparator2.setForeground(new java.awt.Color(0, 0, 0));
 
         jLabel3.setFont(new java.awt.Font("Arial", 0, 11)); // NOI18N
-        jLabel3.setText("CADASTRO DE PERÍODOS");
+        jLabel3.setText("CADASTRO DE RESULTADOS");
 
         jComboBox1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -89,19 +83,14 @@ public class Periodos extends javax.swing.JInternalFrame {
             }
         });
 
-        jLabel2.setText("Remédio");
+        jLabel2.setText("Resultado");
 
-        jLabel5.setText("Qtde");
+        jLabel5.setText("Valor");
 
-        entQtde.setBackground(new java.awt.Color(255, 255, 153));
+        entValor.setBackground(new java.awt.Color(255, 255, 153));
 
         jList2.setBackground(new java.awt.Color(204, 204, 255));
         jList2.setBorder(javax.swing.BorderFactory.createEtchedBorder(javax.swing.border.EtchedBorder.RAISED));
-        jList2.setModel(new javax.swing.AbstractListModel<String>() {
-            String[] strings = { "Item 1", "Item 2", "Item 3", "Item 4", "Item 5" };
-            public int getSize() { return strings.length; }
-            public String getElementAt(int i) { return strings[i]; }
-        });
         jScrollPane1.setViewportView(jList2);
 
         botIncluir.setBackground(new java.awt.Color(153, 255, 153));
@@ -148,7 +137,7 @@ public class Periodos extends javax.swing.JInternalFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                                .addComponent(entQtde, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(entValor, javax.swing.GroupLayout.PREFERRED_SIZE, 45, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                                 .addComponent(botIncluir, javax.swing.GroupLayout.PREFERRED_SIZE, 83, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(jComboBox1, javax.swing.GroupLayout.PREFERRED_SIZE, 213, javax.swing.GroupLayout.PREFERRED_SIZE)))
@@ -156,7 +145,7 @@ public class Periodos extends javax.swing.JInternalFrame {
                         .addGap(26, 26, 26)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(entPeriod, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(entExame, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(241, 241, 241)
                         .addComponent(jLabel3))
@@ -180,7 +169,7 @@ public class Periodos extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel1)
-                    .addComponent(entPeriod, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(entExame, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator2, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
@@ -190,7 +179,7 @@ public class Periodos extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel5)
-                    .addComponent(entQtde, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(entValor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(botIncluir))
                 .addGap(18, 18, 18)
                 .addComponent(jSeparator3, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -228,35 +217,37 @@ public class Periodos extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jComboBox1ActionPerformed
 
     private void botIncluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botIncluirActionPerformed
-        if (jComboBox1.getSelectedItem().toString().equals("") == true || entQtde.getText().equals("")) {
-            JOptionPane.showMessageDialog(rootPane, "Informe remedio e qtde.");
+        if (jComboBox1.getSelectedItem().toString().equals("") == true || entValor.getText().equals("")) {
+            JOptionPane.showMessageDialog(rootPane, "Informe resultado e valor.");
         } else {
-            
-            model.addElement(jComboBox1.getSelectedItem().toString() + " - " + entQtde.getText().trim());
+
+            model.addElement(jComboBox1.getSelectedItem().toString() + " - " + entValor.getText().trim());
             jList2.setModel(model);
 
             //adicionando ao tb
-            tbnmremedi.add(jComboBox1.getSelectedItem().toString().trim());
-            tbqtremedi.add(Double.parseDouble(entQtde.getText()));
+            tbnmresult.add(jComboBox1.getSelectedItem().toString().trim());
+            tbvlresult.add(Double.parseDouble(entValor.getText()));
+            jComboBox1.setSelectedIndex(0);
 
         }
-
 
     }//GEN-LAST:event_botIncluirActionPerformed
 
     private void botCadastroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botCadastroActionPerformed
         try {
-            if (entPeriod.getText().equals("") == false) {
-                criarPeriodo();
-                int sdcdperiod = buscaPeriodo();
-                for (int i = 0; i < tbnmremedi.size(); i++) {
-                    inserirRemedio(Double.parseDouble(tbqtremedi.get(i).toString()), tbnmremedi.get(i).toString(), sdcdperiod);
+            if (entExame.getText().equals("") == false) {
+                int sdcdexame = buscaExame();
+                for (int i = 0; i < tbnmresult.size(); i++) {
+                    int sdcdmetrica = buscaMetrica(tbnmresult.get(i).toString());
+                    inserirExame(Double.parseDouble(tbvlresult.get(i).toString()), tbnmresult.get(i).toString(), sdcdmetrica,sdcdexame);
                 }
             }
+            jList2.removeAll();
+            
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Periodos.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Metricas.class.getName()).log(Level.SEVERE, null, ex);
         } catch (SQLException ex) {
-            Logger.getLogger(Periodos.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Resultados.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_botCadastroActionPerformed
 
@@ -265,47 +256,23 @@ public class Periodos extends javax.swing.JInternalFrame {
         jList2.setModel(esvazia);
     }//GEN-LAST:event_jButton1ActionPerformed
 
-    public void inserirRemedio(double axqtremedi, String axnmremedi, int axcdperiod) throws ClassNotFoundException {
-        try {
-            //MySql connector driver
-            Class.forName("com.mysql.cj.jdbc.Driver");
-            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_renalcontrol?useTimezone=true&serverTimezone=UTC", "root", "root");
-            //Comando SQL
-            Statement stmt = con.createStatement();
-            //Coleta dados do formulário
-            int sdcdusuari = axcdusuari;
-            String sdnmperiod = entPeriod.getText().trim();
-            
-
-            //Insere dados no banco
-            String sddscomsql = " insert into remedios_periodos (cdperiod,cdusuari,qtremedi,nmremedi) values (";
-            sddscomsql += axcdperiod + ","  + sdcdusuari + "," + axqtremedi + ",'"+axnmremedi+"'" +")";
-            stmt.executeUpdate(sddscomsql);
-
-        } catch (SQLException Erro) {
-            JOptionPane.showMessageDialog(null,
-                    "Erro Cmdo SQL" + Erro.getMessage());
-
-// Trata erros de conexão.
-        }
-
-    }
-
-    public int buscaPeriodo() throws ClassNotFoundException, SQLException {
+    public int buscaExame() throws ClassNotFoundException, SQLException {
         int sdvlreturn = 0;
         try {
 
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_renalcontrol?useTimezone=true&serverTimezone=UTC", "root", "root");
             Statement stmt = con.createStatement();
-            ResultSet rs_periodo;
-            String sddscomsql = " select cdperiod from periodos where periodos.cdusuari = " + axcdusuari;
-            sddscomsql += " order by cdperiod desc";
-            rs_periodo = stmt.executeQuery(sddscomsql);
-            if (rs_periodo.next() == true) {
-                sdvlreturn = rs_periodo.getInt("cdperiod");
+            ResultSet rs_exame;
+            String sddscomsql = " select cdexame from exames where exames.cdusuari = " + axcdusuari;
+            sddscomsql += " order by cdexame desc";
+            rs_exame = stmt.executeQuery(sddscomsql);
+            if (rs_exame.next() == true) {
+                sdvlreturn = rs_exame.getInt("cdexame") + 1;
+            } else {
+                sdvlreturn = 1;
             }
-            rs_periodo.close();
+            rs_exame.close();
         } catch (SQLException Erro) {
             javax.swing.JOptionPane.showMessageDialog(null,
                     "Erro Cmdo SQL" + Erro.getMessage());
@@ -314,8 +281,7 @@ public class Periodos extends javax.swing.JInternalFrame {
         return sdvlreturn;
     }
 
-    public void criarPeriodo() throws ClassNotFoundException {
-
+    public void inserirExame(double axvlresult, String axnmresult, int axcdmetrica, int axcdexame) throws ClassNotFoundException {
         try {
             //MySql connector driver
             Class.forName("com.mysql.cj.jdbc.Driver");
@@ -324,12 +290,12 @@ public class Periodos extends javax.swing.JInternalFrame {
             Statement stmt = con.createStatement();
             //Coleta dados do formulário
             int sdcdusuari = axcdusuari;
-            String sdnmperiod = entPeriod.getText().trim();
-            int sdhorario =5;
+            String sdnmresult = entExame.getText().trim();
 
             //Insere dados no banco
-            String sddscomsql = " insert into periodos (cdusuari,nmperiod,hrperiod) values (";
-            sddscomsql += sdcdusuari + "," + "'" + sdnmperiod + "'," + sdhorario + ")";
+            String sddscomsql = " insert into exames (cdexame,cdmetrica,cdusuari,vlresult,nmexame) values (";
+            sddscomsql += axcdexame+","+ axcdmetrica + "," + axcdusuari + ", " + axvlresult;
+            sddscomsql += ", '" +sdnmresult+"')";
             stmt.executeUpdate(sddscomsql);
 
         } catch (SQLException Erro) {
@@ -338,31 +304,56 @@ public class Periodos extends javax.swing.JInternalFrame {
 
 // Trata erros de conexão.
         }
+
     }
 
-    public void carregaLista() throws ClassNotFoundException {
+    public int buscaMetrica(String nmmetrica) throws ClassNotFoundException {
+        int sdvlreturn = 0;
+        try {
+
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_renalcontrol?useTimezone=true&serverTimezone=UTC", "root", "root");
+            Statement stmt = con.createStatement();
+            ResultSet rs_metrica;
+            String sddscomsql = " select cdmetrica from metricas where metricas.cdusuari = " + axcdusuari;
+            sddscomsql += " and nmmetrica='" + nmmetrica + "'";
+            rs_metrica = stmt.executeQuery(sddscomsql);
+            if (rs_metrica.next() == true) {
+                sdvlreturn = rs_metrica.getInt("cdmetrica");
+            }
+            rs_metrica.close();
+        } catch (SQLException Erro) {
+            javax.swing.JOptionPane.showMessageDialog(null,
+                    "Erro Cmdo SQL" + Erro.getMessage());
+        }
+        return sdvlreturn;
+    }
+    
+     public void carregaLista() throws ClassNotFoundException {
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_renalcontrol?useTimezone=true&serverTimezone=UTC", "root", "root");
             Statement stmt = con.createStatement();
-            ResultSet rs_remedio;
-            String sddscomsql = " select * from remedios where remedios.cdusuari = " + axcdusuari;
-            rs_remedio = stmt.executeQuery(sddscomsql);
-            while (rs_remedio.next() == true) {
-                jComboBox1.addItem(rs_remedio.getString("nmremedio"));
+            ResultSet rs_metricas;
+            String sddscomsql = " select * from metricas where cdusuari = " + axcdusuari;
+            rs_metricas = stmt.executeQuery(sddscomsql);
+            jComboBox1.addItem("");
+            while (rs_metricas.next() == true) {
+                jComboBox1.addItem(rs_metricas.getString("nmmetrica"));
             }
-            rs_remedio.close();
+            rs_metricas.close();
         } catch (SQLException Erro) {
             javax.swing.JOptionPane.showMessageDialog(null,
                     "Erro Cmdo SQL" + Erro.getMessage());
         }
     }
 
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton botCadastro;
     private javax.swing.JButton botIncluir;
-    private javax.swing.JTextField entPeriod;
-    private javax.swing.JTextField entQtde;
+    private javax.swing.JTextField entExame;
+    private javax.swing.JTextField entValor;
     private javax.swing.JButton jButton1;
     private javax.swing.JComboBox<String> jComboBox1;
     private javax.swing.JLabel jLabel1;

@@ -10,6 +10,8 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import static view.Remedios.axcdusuari;
@@ -19,13 +21,17 @@ import static view.Remedios.axcdusuari;
  * @author Bruno
  */
 public class Metricas extends javax.swing.JInternalFrame {
+
     public static int axcdusuari;
+
     /**
      * Creates new form Metricas
      */
-    public Metricas(int sdcdusuari) {
+    public Metricas(int sdcdusuari) throws ClassNotFoundException {
         axcdusuari = sdcdusuari;
         initComponents();
+        carregaTabela();
+        jLabel4.setVisible(false);
     }
 
     /**
@@ -206,33 +212,43 @@ public class Metricas extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-        Object sdvlclicked = jTable1.getValueAt(jTable1.getSelectedRow(), 0);
-        Object sdnmremedio = jTable1.getValueAt(jTable1.getSelectedRow(), 1);
-        Object sdqtderemed = jTable1.getValueAt(jTable1.getSelectedRow(), 2);
+        Object sdcdmetrica = jTable1.getValueAt(jTable1.getSelectedRow(), 0);
+        Object sdnmmetrica = jTable1.getValueAt(jTable1.getSelectedRow(), 1);
+        Object sdvlinicial = jTable1.getValueAt(jTable1.getSelectedRow(), 2);
+        Object sdvlfinal = jTable1.getValueAt(jTable1.getSelectedRow(), 3);
 
-        String axdsremedio = sdnmremedio.toString();
-        String axqtderemed = sdqtderemed.toString();
-        String sdremediost = sdvlclicked.toString();
+        String axcdmetrica = sdcdmetrica.toString();
+        String axdsmetrica = sdnmmetrica.toString();
+        String axvlinicial = sdvlinicial.toString();
+        String axvlfinal = sdvlfinal.toString();
 
-        jLabel4.setText(sdremediost);
-        entDsmetrica.setText(axdsremedio);
-        entQtderemedio.setText(axqtderemed);
-
+        jLabel4.setText(axcdmetrica);
+        entDsmetrica.setText(axdsmetrica);
+        entVlinicial.setText(axvlinicial);
+        entVlfinal.setText(axvlfinal);
     }//GEN-LAST:event_jTable1MouseClicked
 
     private void botCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botCadastrarActionPerformed
-       
+
         try {
-            inserirDados();
-            entDsmetrica.setText("");
-            entQtderemedio.setText("");
-            carregaTabela();
+            double finalx = Double.parseDouble(entVlfinal.getText());
+            double inicial = Double.parseDouble(entVlinicial.getText());
+            if (finalx < inicial) {
+                JOptionPane.showMessageDialog(rootPane, "Valor final não pode ser menor que o inicial.");
+            } else {
+                inserirDados();
+                entDsmetrica.setText("");
+                entVlinicial.setText("");
+                entVlfinal.setText("");
+                carregaTabela();
+            }
         } catch (SQLException ex) {
-            Logger.getLogger(Remedios.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Metricas.class.getName()).log(Level.SEVERE, null, ex);
         } catch (ClassNotFoundException ex) {
-            Logger.getLogger(Remedios.class.getName()).log(Level.SEVERE, null, ex);
+            Logger.getLogger(Metricas.class.getName()).log(Level.SEVERE, null, ex);
         }
     }//GEN-LAST:event_botCadastrarActionPerformed
+
 
     private void botAtualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_botAtualizarActionPerformed
         try {
@@ -270,13 +286,13 @@ public class Metricas extends javax.swing.JInternalFrame {
             Statement stmt = con.createStatement();
             //Coleta dados do formulário
             String sdnmmetrica = entDsmetrica.getText().trim();
-            double sdqtestoque = Double.parseDouble(entDsmetrica.getText());
+            double sdvlinicial = Double.parseDouble(entVlinicial.getText());
+            double sdvlfinal = Double.parseDouble(entVlfinal.getText());
             int sdcdusuari = axcdusuari;
-          
 
             //Insere dados no banco
             String sddscomsql = " insert into metricas (cdusuari,vlinicial,vlfinal, nmmetrica) values (";
-            sddscomsql += "'"+sdnmmetrica +"'"+ "," +sdcdusuari+ "," +sdqtestoque+ ")";
+            sddscomsql += sdcdusuari + ", " + sdvlinicial + ", " + sdvlfinal + ", '" + sdnmmetrica + "')";
             stmt.executeUpdate(sddscomsql);
             JOptionPane.showMessageDialog(rootPane, sdnmmetrica + " cadastrado com sucesso.");
 
@@ -287,20 +303,48 @@ public class Metricas extends javax.swing.JInternalFrame {
 // Trata erros de conexão.
         }
     }
-     
-    public void carregaTabela() throws ClassNotFoundException{
-        DefaultTableModel modelo = new DefaultTableModel(null, new String[] {"ID","Nome do remédio", "Qtde. em estoque"});
- 
+
+    public void atualizaDados() throws ClassNotFoundException {
+        try {
+            //MySql connector driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_renalcontrol?useTimezone=true&serverTimezone=UTC", "root", "root");
+            //Comando SQL
+            Statement stmt = con.createStatement();
+            //Coleta dados do formulário
+            int cdmetrica = Integer.parseInt(jLabel4.getText());
+            String sdnmmetrica = entDsmetrica.getText().trim();
+            double sdvlinicial = Double.parseDouble(entVlinicial.getText());
+            double sdvlfinal = Double.parseDouble(entVlfinal.getText());
+            int sdcdusuari = axcdusuari;
+
+            //Insere dados no banco
+            String sddscomsql = "update metricas set nmmetrica ='" + sdnmmetrica + "'," + "vlinicial=" + sdvlinicial + ", vlfinal=" + sdvlfinal + " where cdmetrica = " + cdmetrica;
+            stmt.executeUpdate(sddscomsql);
+            JOptionPane.showMessageDialog(rootPane, sdnmmetrica + " atualizado.");
+            carregaTabela();
+
+        } catch (SQLException Erro) {
+            JOptionPane.showMessageDialog(null,
+                    "Erro Cmdo SQL" + Erro.getMessage());
+
+// Trata erros de conexão.
+        }
+    }
+
+    public void carregaTabela() throws ClassNotFoundException {
+        DefaultTableModel modelo = new DefaultTableModel(null, new String[]{"ID", "Métrica", "Vl.inicial", "Vl.final"});
+
         try {
             Class.forName("com.mysql.cj.jdbc.Driver");
             Connection con = DriverManager.getConnection("jdbc:mysql://localhost:3306/db_renalcontrol?useTimezone=true&serverTimezone=UTC", "root", "root");
             Statement stmt = con.createStatement();
             ResultSet rs_metrica;
-            String sddscomsql  = " select * from metricas where metricas.cdusuari = " + axcdusuari;
+            String sddscomsql = " select * from metricas where metricas.cdusuari = " + axcdusuari;
             rs_metrica = stmt.executeQuery(sddscomsql);
-            while (rs_metrica.next()== true) {
+            while (rs_metrica.next() == true) {
                 String[] dados = new String[4];
-                dados[0] = String.valueOf((int)rs_metrica.getInt("cdmetrica"));
+                dados[0] = String.valueOf((int) rs_metrica.getInt("cdmetrica"));
                 dados[1] = rs_metrica.getString("nmmetrica");
                 dados[2] = String.valueOf(rs_metrica.getDouble("vlinicial"));
                 dados[3] = String.valueOf(rs_metrica.getDouble("vlfinal"));
@@ -314,8 +358,6 @@ public class Metricas extends javax.swing.JInternalFrame {
                     "Erro Cmdo SQL" + Erro.getMessage());
         }
 
-        
-    
     }
-}
 
+}
